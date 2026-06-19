@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TenantController;
@@ -19,14 +18,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    // Users
+    // Users (handles system, tenant, and employee users)
     Route::apiResource('users', UserController::class);
 
     // Tenants
     Route::apiResource('tenants', TenantController::class);
-
-    // Employees
-    Route::apiResource('employees', EmployeeController::class);
 
     // Roles
     Route::get('roles', [RoleController::class, 'index']);
@@ -43,6 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Current user
     Route::get('/user', function (Request $request) {
-        return $request->user()->load('tenant', 'roles');
+        return $request->user()->load('tenant', 'roles', 'children');
     });
 });

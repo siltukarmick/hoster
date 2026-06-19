@@ -2,12 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
 
-class Tenant extends Model
+class Tenant extends Authenticatable
 {
-    protected $fillable = ['name', 'email', 'domain', 'status'];
+    use HasApiTokens, Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'domain',
+        'status',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password'          => 'hashed',
+    ];
 
     public function users(): HasMany
     {

@@ -50,10 +50,10 @@ class AclSeeder extends Seeder
         $adminUser = User::firstOrCreate(
             ['email' => 'admin@hoster.test'],
             [
-                'name'      => 'System Admin',
-                'email'     => 'admin@hoster.test',
-                'password'  => Hash::make('password'),
-                'user_type' => 'system',
+                'name'     => 'System Admin',
+                'email'    => 'admin@hoster.test',
+                'password' => Hash::make('password'),
+                'type'     => 'system',
             ]
         );
 

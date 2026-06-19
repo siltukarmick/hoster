@@ -20,8 +20,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'user_type',
+        'type',
         'tenant_id',
+        'parent_id',
+        'phone',
+        'status',
     ];
 
     protected $hidden = [
@@ -42,28 +45,43 @@ class User extends Authenticatable
         return $this->belongsTo(Tenant::class);
     }
 
-    public function employees(): HasMany
+    public function parent(): BelongsTo
     {
-        return $this->hasMany(Employee::class, 'tenant_user_id');
+        return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(User::class, 'parent_id');
     }
 
     public function isSystemUser(): bool
     {
-        return $this->user_type === 'system';
+        return $this->type === 'system';
     }
 
     public function isTenantUser(): bool
     {
-        return $this->user_type === 'tenant';
+        return $this->type === 'tenant';
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->type === 'employee';
     }
 
     public function scopeSystem($query)
     {
-        return $query->where('user_type', 'system');
+        return $query->where('type', 'system');
     }
 
     public function scopeTenant($query)
     {
-        return $query->where('user_type', 'tenant');
+        return $query->where('type', 'tenant');
+    }
+
+    public function scopeEmployee($query)
+    {
+        return $query->where('type', 'employee');
     }
 }

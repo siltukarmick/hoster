@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('password')->string();
             $table->string('domain')->nullable()->unique();
             $table->enum('status', ['active', 'suspended', 'cancelled'])->default('active');
             $table->timestamps();
